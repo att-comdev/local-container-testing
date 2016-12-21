@@ -19,6 +19,14 @@ git clone https://github.com/att-comdev/local-container-testing.git
 chmod +X launch.sh reset_db.sh clean.sh
 ```
 
+Grab the latest keystone code or whatever version you need for github. 
+If using another version update ./keystone/etc configuration file and 
+setting appropriately with the correct keystone config files
+```
+cd ./keystone/code/keystone
+git pull or git clone https://git.openstack.org/openstack/keystone
+``` 
+
 Reset mysql database with skeleton mysql. Currently keystone database already created
 
 ```
