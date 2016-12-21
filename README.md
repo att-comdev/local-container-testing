@@ -1,5 +1,5 @@
 # local-container-testing
-Please see [release notes]() for current and planned features.
+Please see [release notes](https://github.com/att-comdev/halcyon-vagrant-kubernetes/releases) for current and planned features.
 
 A local approach for developers to run/test/debug their OpenStack code inside Docker containers before pushing to remote. 
 
@@ -12,21 +12,31 @@ A local approach for developers to run/test/debug their OpenStack code inside Do
 A manual build that will spin up associated service dependencies [RabbitMQ, MySQL, Memcach] each inside their own Container. We start a Keystone Container as our proof of concept. Others container can be added later
 
 ### Launch
+Clone repo and make scripts executable
+
 ```
-# clone repo and make scripts executable
 git clone https://github.com/att-comdev/local-container-testing.git
 chmod +X launch.sh reset_db.sh clean.sh
+```
 
-# reset mysql database with skeleton mysql. Currently keystone database created
+Reset mysql database with skeleton mysql. Currently keystone database already created
+
+```
 ./reset_db.sh
+```
 
-# launch script to build images, run containers. First run will take significant more time than repeted runs as parts of the build will get cached
+Launch script to build images, run containers. **Note:** First run will take significant more time than repeted runs as parts of the build will get cached
+
+```
 ./launch.sh
 ```
  
 ### Clean Up
-./clean.sh
+Stop Containers and remove Images. Should be run after finished working with a launch to clean up
 
+```
+./clean.sh
+```
 
  
 ## Docker-Compose Build Run
