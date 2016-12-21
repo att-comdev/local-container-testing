@@ -1,0 +1,8 @@
+.DS_STORE
+keystone/logs/*
+mysql/storage/*
+mysql/storage-old/*
+rabbit/logs/*
+rabbit/data/*
+
+
