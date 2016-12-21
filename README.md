@@ -1,5 +1,5 @@
 # local-container-testing
-Please see [release notes](https://github.com/att-comdev/halcyon-vagrant-kubernetes/releases) for current and planned features.
+Please see [release notes]() for current and planned features.
 
 A local approach for developers to run/test/debug their OpenStack code inside Docker containers before pushing to remote. 
 
