@@ -1,0 +1,71 @@
+version: '2'
+
+services:
+
+  keystone:
+    container_name: keystone
+    hostname: keystone
+    env_file: ./keystone/config/environment.cfg
+    build: 
+      context: ./keystone
+    privileged: false
+    ports:
+      - "5000:5000"
+      - "35357:35357"
+      - "3001:3001"
+    networks:
+      - os-debug
+    volumes: 
+      - ./keystone/logs:/var/log/apache2 
+    links:
+      - db
+      - rabbit
+      - memcache
+    depends_on:
+      - db
+      - rabbit
+      - memcache
+  db:
+    container_name: db
+    env_file: ./mysql/config/environment.cfg
+    build: 
+      context: ./mysql
+    #privileged: true
+    ports:
+      - "3306:3306"
+    networks:
+      - os-debug
+    volumes: 
+      - ./mysql/storage/mysql:/var/lib/mysql
+
+  rabbit:
+    container_name: rabbit
+    build: 
+      context: ./rabbit
+    privileged: false
+    ports:
+      - "5672:5672"
+      - "5671:5671"
+      - "4369:4369"
+      - "25672:25672"
+    networks:
+      - os-debug
+    volumes: 
+      - ./rabbit/data:/data/mnesia
+
+  memcache:
+    container_name: memcache
+    build: 
+      context: ./memcache
+    privileged: false
+    ports:
+      - "11211:11211"
+    networks:
+      - os-debug
+
+networks:
+  os-debug:
+    driver: bridge
+
+
+

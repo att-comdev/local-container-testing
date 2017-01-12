@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  name: memcache
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        service: memcache
+    spec:
+      containers:
+      - name: memcache
+        ports:
+        - containerPort: 11211
+          protocol: TCP
+        resources: {}
+      restartPolicy: Always
+status: {}

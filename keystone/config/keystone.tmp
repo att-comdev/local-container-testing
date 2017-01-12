@@ -1,0 +1,6 @@
+admin_token = ADMIN_TOKEN
+debug = true
+verbose = true
+connection = mysql+pymysql://root:KEYSTONE_DBPASS@db/keystone
+servers = memcache:11211
+provider = fernet

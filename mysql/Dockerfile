@@ -1,22 +1,20 @@
-FROM ubuntu:16.04
-MAINTAINER Andre.Pollard@att.com
+FROM alpine:latest
+MAINTAINER Andre Pollard ap2516@att.com
 
-RUN groupadd -r mysql && useradd -r -g mysql mysql
-# usage USER mysql
+RUN apk update && \
+	apk add mysql mysql-client && \
+	addgroup mysql mysql && \
+	mkdir /scripts && \
+	rm -rf /var/cache/apk/*
 
-# update and install mariadb
-RUN apt-get update -qq && \
-    apt-get install -y mariadb-server ntp 
+VOLUME ["/var/lib/mysql"]
 
-# copy standard mysql config for mariadb
 COPY ./config/my.cnf /etc/mysql/my.cnf
+COPY ./scripts/startup.sh /scripts/startup.sh
+RUN chmod +x /scripts/startup.sh
 
-# mysql port exposed
 EXPOSE 3306
 
-# launch mysql
-CMD ["mysqld_safe"]
-
-
+ENTRYPOINT ["/scripts/startup.sh"]
 
 
