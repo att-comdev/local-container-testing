@@ -49,23 +49,23 @@ docker-compose -f docker-compose.debug.yml down
     #ptvsd.wait_for_attach()
     ```
 - Set a break point in the controllers.py file as an example, at line 50
-  ```
-  50 CONF = keystone.conf.CONF
-  51 LOG = log.getLogger(__name__)
-  ```
+    ```
+    50 CONF = keystone.conf.CONF
+    51 LOG = log.getLogger(__name__)
+    ```
 - Done: Add python remote debugging section to: LOCAL-CONTAINER-TESTING/.vscode/launch.json
-  ```               
-        {
-                        "name": "Attach (Remote Debug)",
-                        "type": "python",
-                        "request": "attach",
-                        "localRoot": "${workspaceRoot}",
-                        "remoteRoot": "/var/lib/keystone",
-                        "port": 3001,
-                        "secret": "my_secret",
-                        "host": "localhost"
-        }
-  ```
+    ```               
+          {
+                          "name": "Attach (Remote Debug)",
+                          "type": "python",
+                          "request": "attach",
+                          "localRoot": "${workspaceRoot}",
+                          "remoteRoot": "/var/lib/keystone",
+                          "port": 3001,
+                          "secret": "my_secret",
+                          "host": "localhost"
+          }
+    ```
 
 
 # TODO
