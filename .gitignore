@@ -1,5 +1,5 @@
 .DS_STORE
-keystone/code/*
+keystone/code/keystone/*
 keystone/logs/*
 mysql/storage/*
 mysql/storage-old/*
