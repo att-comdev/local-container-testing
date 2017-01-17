@@ -15,6 +15,7 @@ Clone repo and make scripts executable
 
 ```
 git clone https://github.com/att-comdev/local-container-testing.git
+
 docker-compose -f docker-compose.debug.yml up --build -d
 ```
 
@@ -67,6 +68,13 @@ docker-compose -f docker-compose.debug.yml down
           }
     ```
 
+Test Openstack
+```
+openstack --os-auth-url http://keystone:35357/v3 \
+  --os-project-domain-name default --os-user-domain-name default \
+  --os-password admin_password \
+  --os-project-name admin --os-username admin token issue
+```
 
 # TODO
 

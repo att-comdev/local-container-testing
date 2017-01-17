@@ -14,8 +14,8 @@ RUN apt-get update -qq && \
 RUN echo "manual" > /etc/init/keystone.override
 
 # add python dependencies and clients
-RUN pip install --upgrade pip
-RUN pip install python-glanceclient python-keystoneclient python-openstackclient  
+#RUN pip install --upgrade pip
+RUN pip install python-openstackclient  
 RUN pip install repoze.lru pbr mysql-python ptvsd
 #RUN pip install oslo.log oslo.cache olso.messaging
 
@@ -48,6 +48,7 @@ ENV APACHE_LOG_DIR /var/log/apache2
 ENV APACHE_LOCK_DIR /var/lock/apache2
 ENV APACHE_PID_FILE /var/run/apache2.pid
 RUN rm -f /etc/apache2/sites-enabled/000-default.conf
+RUN sed -i '1s/^/ServerName keystone\n/' /etc/apache2/apache2.conf
 COPY ./config/wsgi-keystone.conf /etc/apache2/sites-available/wsgi-keystone.conf 
 RUN ln -s /etc/apache2/sites-available/wsgi-keystone.conf /etc/apache2/sites-enabled
 
@@ -67,7 +68,8 @@ RUN pip install .
 EXPOSE 5000 35357 3001
 
 # launch apache2
-CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
+#CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND","&& /root/post_container_setup.sh"]
+CMD /usr/sbin/apache2ctl -D FOREGROUND & /root/post_container_setup.sh
 
 
 
