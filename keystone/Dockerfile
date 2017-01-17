@@ -49,7 +49,8 @@ ENV APACHE_LOCK_DIR /var/lock/apache2
 ENV APACHE_PID_FILE /var/run/apache2.pid
 RUN rm -f /etc/apache2/sites-enabled/000-default.conf
 RUN sed -i '1s/^/ServerName keystone\n/' /etc/apache2/apache2.conf
-COPY ./config/wsgi-keystone.conf /etc/apache2/sites-available/wsgi-keystone.conf 
+COPY ./code/keystone/httpd/wsgi-keystone.conf /etc/apache2/sites-available/wsgi-keystone.conf 
+#COPY ./config/wsgi-keystone.conf /etc/apache2/sites-available/wsgi-keystone.conf 
 RUN ln -s /etc/apache2/sites-available/wsgi-keystone.conf /etc/apache2/sites-enabled
 
 # add in script to setup fernet tokens to run after container is up

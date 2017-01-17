@@ -1,3 +1,5 @@
+Manual Run
+
 # run memcache and put local IP for memcache into etc/hosts with parameter -h memcache
 docker run --name memcache -d -p 11211:11211 -h memcache memcachebuild 
 

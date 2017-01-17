@@ -1,40 +1,30 @@
-# local-container-testing
+## local-container-testing
+```
+A local approach for developers to run/test/debug their OpenStack 
+code inside Docker containers before pushing to remote. 
+```
 
-A local approach for developers to run/test/debug their OpenStack code inside Docker containers before pushing to remote. 
+### Scope
+```
+Ability to pull keystone code into a docker container but will first launch associated 
+supporting services such as (RabbitMQ, MySQL and Memcache) into their own containers.  
+We are starting with Keystone, others container can be added later
+```
 
-## Requirements
+### *Requirements*
+```
+Docker Engine (version 1.12 and up)
+```
 
-  * Docker Engine (version 1.12 and up)
-
-
-## Docker Compose Up
-Will build and spin up associated service dependencies [RabbitMQ, MySQL, Memcach] each inside their own Container. We start a Keystone Container as our proof of concept. Others container can be added later
-
-### Launch
-Clone repo and make scripts executable
-
+### Clone Repo and select desired keystone version
 ```
 git clone https://github.com/att-comdev/local-container-testing.git
-
-docker-compose -f docker-compose.debug.yml up --build -d
+cd local-container-testing/keystone/code
+git clone https://github.com/openstack/keystone.git #on master here
+git checkout -b stable/mitaka
 ```
 
-Grab the latest keystone code or whatever version you need from github. 
-If using another version, update ./keystone/etc configuration file and 
-setting appropriately with the correct keystone config files and their settings
-```
-cd ./keystone/code/keystone
-git pull *OR* git clone https://git.openstack.org/openstack/keystone
-
-``` 
-
-Docker Compose Down
-
-```
-docker-compose -f docker-compose.debug.yml down
-```
-
-### Requirements
+### Install Visual Studio Code
 - Visual Studio Code (http://code.visualstudio.com/)
 - Visual Studio code Plugin for Python Syntacs and Remote Debugging (https://marketplace.visualstudio.com/search?term=python&target=VSCode&sortBy=Relevance)
 - Done in Container: Visual Studio Code Python Tools for remote debugging server (https://pypi.python.org/pypi/ptvsd OR pip install ptvsd)
@@ -55,7 +45,8 @@ docker-compose -f docker-compose.debug.yml down
     51 LOG = log.getLogger(__name__)
     ```
 - Done: Add python remote debugging section to: LOCAL-CONTAINER-TESTING/.vscode/launch.json
-    ```               
+    ```       
+          ...        
           {
                           "name": "Attach (Remote Debug)",
                           "type": "python",
@@ -68,7 +59,30 @@ docker-compose -f docker-compose.debug.yml down
           }
     ```
 
-Test Openstack
+### Launch services with docker-compose up
+```
+cd local-container-testing
+docker-compose -f docker-compose.debug.yml up --build -d
+# Note: this will wait at the breakpoint set in the code
+```
+
+## Enable Visual Studio Code Debugging 
+```
+  Left Icon looking like a bug
+  Click the Debug drop down green arrow, select 'Attach (Remote Debug)'
+  Should see debugging variables populate and be able to step through the 
+  code in the debugger
+```
+
+
+### Shutdown services with docker-compose down
+```
+cd local-container-testing
+docker-compose -f docker-compose.debug.yml down
+```
+
+
+#### Test Openstack with Openstack client
 ```
 openstack --os-auth-url http://keystone:35357/v3 \
   --os-project-domain-name default --os-user-domain-name default \
@@ -76,6 +90,7 @@ openstack --os-auth-url http://keystone:35357/v3 \
   --os-project-name admin --os-username admin token issue
 ```
 
-# TODO
+
+## TODO
 
 * Add other OpenStack Core Services
