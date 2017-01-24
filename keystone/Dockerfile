@@ -35,8 +35,29 @@ RUN chmod +x /tmp/keystone_init.sh
 RUN /bin/bash -c "/tmp/keystone_init.sh install"
 
 # copy keystone configuration files to proper location
-COPY ./etc/* /etc/keystone/
-RUN chown -R keystone:keystone /etc/keystone
+COPY ./code/keystone/etc/keystone.conf.sample /etc/keystone/keystone.conf
+COPY ./code/keystone/etc/default_catalog.templates /etc/keystone/default_catalog.templates
+COPY ./code/keystone/etc/keystone-paste.ini /etc/keystone/keystone-paste.ini 
+COPY ./code/keystone/etc/logging.conf.sample /etc/keystone/logging.conf
+COPY ./code/keystone/etc/policy.json /etc/keystone/policy.json
+COPY ./code/keystone/etc/policy.v3cloudsample.json /etc/keystone/policy.v3cloudsample.json
+COPY ./code/keystone/etc/sso_callback_template.html /etc/keystone/sso_callback_template.html
+
+#RUN chown -R keystone:keystone /etc/keystone
+#sed -i "s|#connection = <None>|connection = mysql://glance:glance@$MY_PRIVATE_IP/glance|g" /etc/glance/glance-api.conf
+#sed -i "s/rabbit_host = localhost/rabbit_host = $MY_PRIVATE_IP/g" /etc/glance/glance-api.conf
+#sed -i "s/auth_host = 127.0.0.1/auth_host = $MY_PRIVATE_IP/g" /etc/glance/glance-api.conf
+#sed -i 's/%SERVICE_TENANT_NAME%/service/g' /etc/glance/glance-api.conf
+#sed -i 's/%SERVICE_USER%/glance/g' /etc/glance/glance-api.conf
+#sed -i 's/%SERVICE_PASSWORD%/glance/g' /etc/glance/glance-api.conf
+#sed -i 's/#flavor=/flavor = keystone/g' /etc/glance/glance-api.conf
+#sed -i 's/#show_image_direct_url = False/show_image_direct_url = True/g' /etc/glance/glance-api.conf
+RUN sed -i "s/#admin_token = <None>/admin_token = e4d3fdd60a90a5408e6e/g" /etc/keystone/keystone.conf
+#RUN sed -i "s/#connection = <None>/connection = mysql+pymysql://keystone:keystone_password@db/keystone/g" /etc/keystone/keystone.conf
+RUN sed -i "s|#connection = <None>|connection = mysql://keystone:keystone@$KEYSTONE_DBPASS/keystone|g" /etc/keystone/keystone.conf
+RUN sed -i "s/#provider = fernet/provider = fernet/g" /etc/keystone/keystone.conf
+
+#connection = <None>
 COPY ./code/keystone /var/lib/keystone
 RUN chown -R keystone:keystone /var/lib/keystone
 
@@ -70,7 +91,8 @@ EXPOSE 5000 35357 3001
 
 # launch apache2
 #CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND","&& /root/post_container_setup.sh"]
-CMD /usr/sbin/apache2ctl -D FOREGROUND & /root/post_container_setup.sh
+CMD /usr/sbin/apache2ctl -D FOREGROUND 
+#& /root/post_container_setup.sh
 
 
 
