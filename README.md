@@ -32,6 +32,7 @@ git checkout -b stable/mitaka
 
   For example, keystone manage.py at: 
   local-container-testing/keystone/code/keystone/cmd/manage.py
+    
     ```
     import ptvsd
     ptvsd.enable_attach("my_secret", address = ('0.0.0.0', 3001))
@@ -40,6 +41,7 @@ git checkout -b stable/mitaka
     ptvsd.wait_for_attach()
     ```
 - Set a break point in the manage.py file as an example, on the config_files line
+    
     ```
 def main():
     dev_conf = os.path.join(possible_topdir,
@@ -49,7 +51,9 @@ def main():
     if os.path.exists(dev_conf):
         config_files = [dev_conf]
     ```
-- Done: Add python remote debugging section to: LOCAL-CONTAINER-TESTING/.vscode/launch.json
+- Done: Add python remote debugging section to: 
+LOCAL-CONTAINER-TESTING/.vscode/launch.json
+   
     ```       
           ...        
                 {
