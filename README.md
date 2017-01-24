@@ -30,33 +30,38 @@ git checkout -b stable/mitaka
 - Done in Container: Visual Studio Code Python Tools for remote debugging server (https://pypi.python.org/pypi/ptvsd OR pip install ptvsd)
 - Add the following lines of code into the top of the module you would like to degug. Note remote has to be same as local, but since we are mounting dir into container it is the same
 
-  For example, keystone controllers.py at: 
-  local-container-testing/keystone/code/keystone/keystone/identity/controllers.py
+  For example, keystone manage.py at: 
+  local-container-testing/keystone/code/keystone/cmd/manage.py
     ```
     import ptvsd
     ptvsd.enable_attach("my_secret", address = ('0.0.0.0', 3001))
 
     #Enable the below line of code only if you want the application to wait untill the debugger has attached to it
-    #ptvsd.wait_for_attach()
+    ptvsd.wait_for_attach()
     ```
-- Set a break point in the controllers.py file as an example, at line 50
+- Set a break point in the manage.py file as an example, on the config_files line
     ```
-    50 CONF = keystone.conf.CONF
-    51 LOG = log.getLogger(__name__)
+def main():
+    dev_conf = os.path.join(possible_topdir,
+                            'etc',
+                            'keystone.conf')
+    config_files = None
+    if os.path.exists(dev_conf):
+        config_files = [dev_conf]
     ```
 - Done: Add python remote debugging section to: LOCAL-CONTAINER-TESTING/.vscode/launch.json
     ```       
           ...        
-          {
-                          "name": "Attach (Remote Debug)",
-                          "type": "python",
-                          "request": "attach",
-                          "localRoot": "${workspaceRoot}",
-                          "remoteRoot": "/var/lib/keystone",
-                          "port": 3001,
-                          "secret": "my_secret",
-                          "host": "localhost"
-          }
+                {
+                        "name": "Attach (Remote Debug)",
+                        "type": "python",
+                        "request": "attach",
+                        "localRoot": "${workspaceRoot}/keystone/code/keystone",
+                        "remoteRoot": "/var/lib/keystone",
+                        "port": 3001,
+                        "secret": "my_secret",
+                        "host": "localhost"
+                }
     ```
 
 ### Launch services with docker-compose up
@@ -64,6 +69,8 @@ git checkout -b stable/mitaka
 cd local-container-testing
 docker-compose -f docker-compose.debug.yml up --build -d
 # Note: this will wait at the breakpoint set in the code
+Issue command into keystone container to have code reach breakpoint
+docker exec -it keystone /bin/bash /root/post_container_setup.sh
 ```
 
 ## Enable Visual Studio Code Debugging 
@@ -71,8 +78,12 @@ docker-compose -f docker-compose.debug.yml up --build -d
   Left Icon looking like a bug
   Click the Debug drop down green arrow, select 'Attach (Remote Debug)'
   Should see debugging variables populate and be able to step through the 
-  code in the debugger
+  code in the debugger. If get error, keep clicking green arrow until code reaches
+  the breakpoint
 ```
+
+![visual studio code debugging](vscode.png)
+
 
 
 ### Shutdown services with docker-compose down
