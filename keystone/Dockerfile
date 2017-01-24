@@ -28,7 +28,6 @@ RUN mkdir -p /var/lib/keystone
 RUN mkdir -p /var/log/keystone
 RUN mkdir -p /etc/keystone
 
-
 # setup startup stuff for keystone, stole script from apt package manager
 COPY ./scripts/keystone_init.sh /tmp/keystone_init.sh
 RUN chmod +x /tmp/keystone_init.sh
@@ -43,21 +42,10 @@ COPY ./code/keystone/etc/policy.json /etc/keystone/policy.json
 COPY ./code/keystone/etc/policy.v3cloudsample.json /etc/keystone/policy.v3cloudsample.json
 COPY ./code/keystone/etc/sso_callback_template.html /etc/keystone/sso_callback_template.html
 
-#RUN chown -R keystone:keystone /etc/keystone
-#sed -i "s|#connection = <None>|connection = mysql://glance:glance@$MY_PRIVATE_IP/glance|g" /etc/glance/glance-api.conf
-#sed -i "s/rabbit_host = localhost/rabbit_host = $MY_PRIVATE_IP/g" /etc/glance/glance-api.conf
-#sed -i "s/auth_host = 127.0.0.1/auth_host = $MY_PRIVATE_IP/g" /etc/glance/glance-api.conf
-#sed -i 's/%SERVICE_TENANT_NAME%/service/g' /etc/glance/glance-api.conf
-#sed -i 's/%SERVICE_USER%/glance/g' /etc/glance/glance-api.conf
-#sed -i 's/%SERVICE_PASSWORD%/glance/g' /etc/glance/glance-api.conf
-#sed -i 's/#flavor=/flavor = keystone/g' /etc/glance/glance-api.conf
-#sed -i 's/#show_image_direct_url = False/show_image_direct_url = True/g' /etc/glance/glance-api.conf
 RUN sed -i "s/#admin_token = <None>/admin_token = e4d3fdd60a90a5408e6e/g" /etc/keystone/keystone.conf
-#RUN sed -i "s/#connection = <None>/connection = mysql+pymysql://keystone:keystone_password@db/keystone/g" /etc/keystone/keystone.conf
 RUN sed -i "s|#connection = <None>|connection = mysql://keystone:keystone@$KEYSTONE_DBPASS/keystone|g" /etc/keystone/keystone.conf
 RUN sed -i "s/#provider = fernet/provider = fernet/g" /etc/keystone/keystone.conf
 
-#connection = <None>
 COPY ./code/keystone /var/lib/keystone
 RUN chown -R keystone:keystone /var/lib/keystone
 
