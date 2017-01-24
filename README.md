@@ -97,7 +97,8 @@ docker-compose -f docker-compose.debug.yml down
 ```
 
 
-#### Test Openstack with Openstack client
+#### Note: ###
+Can use to test Openstack with Openstack client from remote. Add keystone IP to your hostfile
 ```
 openstack --os-auth-url http://keystone:35357/v3 \
   --os-project-domain-name default --os-user-domain-name default \
